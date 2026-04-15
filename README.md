@@ -1,23 +1,28 @@
 # Project IMAGO
 
-High level Architecture
+High-level architecture and delivery strategy for a hybrid media platform.
 
 ![Architecture sketch](image.png)
 
 ## Table of Contents
 
-1. [Assumptions](#assumptions)
-2. [Key Decisions](#key-decisions)
+1. [Project Overview](#project-overview)
+2. [Assumptions](#assumptions)
+3. [Key Decisions](#key-decisions)
    - [Hybrid Infrastructure Model](#hybrid-infrastructure-model)
    - [Kubernetes as Core Platform](#kubernetes-as-core-platform)
    - [Infrastructure as Code (IaC)](#infrastructure-as-code-iac)
    - [Networking](#networking)
-3. [Observability & Monitoring](#observability--monitoring)
-4. [Migration Strategy](#migration-strategy)
-5. [CI/CD Strategy](#cicd-strategy)
-6. [Security Considerations](#security-considerations)
-7. [Trade-offs](#trade-offs)
-8. [Future Improvements](#future-improvements)
+4. [Observability & Monitoring](#observability--monitoring)
+5. [Migration Strategy](#migration-strategy)
+6. [CI/CD Strategy](#cicd-strategy)
+7. [Security Considerations](#security-considerations)
+8. [Trade-offs](#trade-offs)
+9. [Future Improvements](#future-improvements)
+
+## Project Overview
+
+This document captures the architecture and operational approach for Project IMAGO, a media delivery platform that blends cloud, Kubernetes, and bare metal infrastructure to support authenticated media workflows.
 
 ## Assumptions
 
@@ -36,15 +41,15 @@ To scope this solution, the following assumptions were made:
 
 ### Hybrid Infrastructure Model
 
-- **Cloud:** Hetzner Cloud for stateless workloads and Kubernetes cluster nodes
-- **Bare metal:** Elasticsearch for performance and disk I/O, plus storage-heavy workloads
-- **Reason:** Balance cost efficiency with performance
+- **Cloud:** Hetzner Cloud is used for stateless workloads and Kubernetes cluster nodes.
+- **Bare metal:** Elasticsearch and storage-heavy workloads are hosted on bare metal for performance and disk I/O.
+- **Reason:** Balance cost efficiency with performance.
 
 ### Kubernetes as Core Platform
 
-- All new services run on Kubernetes (K8s)
-- Deploy using Helm or Kustomize
-- Enables standardized deployments, autoscaling, and self-service for teams
+- All new services run on Kubernetes (K8s).
+- Deploy using Helm or Kustomize.
+- Enables standardized deployments, easy scaling, and self-service for teams.
 
 #### Service Deployment Model
 
@@ -59,7 +64,7 @@ To scope this solution, the following assumptions were made:
 
 - **Terraform:** Infrastructure provisioning
 - **Ansible:** Configuration management for legacy systems and bare metal
-- **Helm:** Kubernetes deployments
+- **Helm:** Kubernetes deployment management
 
 #### Infra Repo Structure
 
@@ -146,16 +151,33 @@ Stages:
 - Manual approval
 - Deploy to production
 
+### Deployment Strategy
+
+- Helm-based deployments
+- Rolling updates
+- Blue/Green deployment as a future improvement
+- Terraform plan → review → apply for infrastructure changes
+
 ## Security Considerations
 
+- TLS everywhere
 - Private networking
 - IAM/RBAC in Kubernetes
 - Secrets management (Vault later)
 
 ## Trade-offs
 
-| Decision           | Trade-off                                    |
-| ------------------ | -------------------------------------------- |
-| Kubernetes         | Added complexity vs. flexibility              |
-| Hybrid infrastructure | Operational overhead vs. cost/performance |
-| Gradual migration  | Slower migration pace vs. reduced risk       |
+| Decision             | Trade-off                                    |
+| -------------------- | -------------------------------------------- |
+| Kubernetes           | Added complexity vs. flexibility              |
+| Hybrid infrastructure| Operational overhead vs. cost/performance     |
+| Gradual migration    | Slower migration pace vs. reduced risk        |
+
+## Future Improvements
+
+- GitOps with ArgoCD or Flux
+- Full zero-downtime deployments
+- Service mesh (Istio or Linkerd)
+- Replace remaining Windows systems
+- Multi-region setup
+
