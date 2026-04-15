@@ -83,7 +83,7 @@ infrastructure/
 
 ### Networking
 
-- Ingress controller: NGINX or Traefik
+- Ingress controller: NGINX
 - Internal service communication via Kubernetes networking
 - Private network connectivity between cloud and bare metal environments
 
